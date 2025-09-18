@@ -1,6 +1,6 @@
 from flask import Flask
 import config
-from exts import db, mail
+from exts import db, mail, cache
 from flask_migrate import Migrate
 from models import auth
 from apps.front import front_bp
@@ -16,6 +16,8 @@ mail.init_app(app)
 migrate = Migrate(app, db)
 
 mycelery = make_celery(app)
+
+cache.init_app(app)
 
 # 注册蓝图
 app.register_blueprint(front_bp)

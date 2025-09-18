@@ -2,7 +2,7 @@ import random
 import string
 from flask import Blueprint, jsonify, render_template, request, current_app
 from flask_mail import Message
-from exts import mail
+from exts import mail, cache
 
 bp = Blueprint("front", __name__, url_prefix="/")
 
@@ -43,6 +43,8 @@ def email_captcha():
     subject = "flask_bbs注册邮箱验证"
     body = f"您的验证码是：{captcha}"
     current_app.celery.send_task("send_mail", (email, subject, body))
+    cache.set(email, captcha)
+    print(cache.get(email))
     return jsonify({"code": 200, "message": "邮件发送成功"})
 
 
